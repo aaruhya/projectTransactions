@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@model IEnumerable<PRFinance.Models.Transaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Transactions</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+
+    @using (Html.BeginForm())
+    {
+    <p>
+        Category: @Html.DropDownList("CategoryList", "All")
+        &nbsp
+        <input type="submit" value="Filter" />
+    </p>
+    }
+    </p>
+
+
+    @*<table class="table">
+       
+        <thead style="display:table-header-group;">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Expense)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>
+
+            </tr>
+        </thead>
+
+        <tbody data-bind="template: { name: templateToUse, foreach: items}"></tbody>
+
+
+    </table>*@
+
+
+<script id="itemTmpl" type="text/html">
+    <tr>
+        <td data-bind="text: model.date"></td>
+        <td data-bind="text: model.Category"></td>
+        <td data-bind="text: model.Expense"></td>
+        <td data-bind="text: model.Comment"></td>
+        <td class="buttons">
+            <button data-bind="click: $root.editItem">Edit</button>
+            <button data-bind="click: $root.deleteItem">Delete</button>
+
+        </td>
+    </tr>
+</script>
+
+<script id="editTmpl" type="text/html">
+    <tr>
+        <td>
+            <input data-bind="value: date" />
+        </td>
+        <td>
+            <input data-bind="value: Category" />
+        </td>
+        <td>
+            <input data-bind="value: Expense" />
+        </td>
+        <td>
+            <input data-bind="value: Comment" />
+        </td>
+        <td class="buttons">
+            <button data-bind="click: $root.acceptItemEdit">Accept</button>
+            <button data-bind="click: $root.cancelItemEdit">Cancel</button>
+        </td>
+    </tr>
+</script>
+    
+
+    <tr class="zebra">
+            <td colspan="4">
+                <table class="table-striped">
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Expense)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+
+                            <input id=@iid type="submit" value="Edit" onclick="return EditClick('@iid');" /> |
+                            @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "Edit" }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "Delete" })
+                        </td>
+                    </tr>
+
+
+
+                    <tr id=@name style="display:none">
+                        <td>
+                            <div>
+                                <h4 style="color:gray">Transaction Details</h4>
+                                <hr />
+                                <dl class="dl-horizontal">
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.date)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.date)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Category)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Category)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Expense)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Expense)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Comment)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Comment)
+                                    </dd>
+
+                                </dl>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+        </tr>

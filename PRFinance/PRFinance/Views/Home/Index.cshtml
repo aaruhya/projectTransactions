@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>PR Finanace</h1>
+    <p class="lead">Financial View for PR household</p>
+    <button class="btn btn-primary btn-large" >@Html.ActionLink("View Transactions", "Index", "TransactionEdit") &raquo;</button>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Monthly Chart</h2>
+        <p>
+            Monthly expense chart
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a>
+        
+        </p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>FICO graph</h2>
+        <p>View how your FICO score is trending</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Savings Chart</h2>
+        <p>See hoe you are saving monthly.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>

@@ -1,0 +1,364 @@
+﻿@model IEnumerable<PRFinance.Models.Transaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Transactions</h2>
+
+<br />
+<!-- Create section -->
+<section style="background-color: #D8E4E8">
+
+    <input id="CreateButton" type="button" class="btn btn-default" value="Create New" onclick="return CreateClick();" />
+
+    <div class="col-md-12" style=" display:none" id="CreatePane">
+        @using (Html.BeginForm("Create", "TransactionEdit", FormMethod.Post, new { @class = "TransactionForm" }))
+        {
+
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Transaction</h4>
+                <hr />
+                @Html.ValidationSummary(true)
+
+                <fieldset>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            @Html.DisplayNameFor(model => model.date)
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBox("CreateDate")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            @Html.DisplayNameFor(model => model.Category)
+                        </div>
+                        <div class="col-md-8">
+                            @Html.DropDownList("CategoryList", "All")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            @Html.DisplayNameFor(model => model.Expense)
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBox("Expense")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            @Html.DisplayNameFor(model => model.Comment)
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBox("Comment")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="float:left">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                        <div style="float:left">
+                            <input id="CreateCancel" type="button" value="Cancel" class="Delete" onclick="return CancelCreate();" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+        }
+    </div>
+</section>
+
+<div style="height:5px; fill:blue"></div>
+<!-- Filter -->   
+    @using (Html.BeginForm())
+    {
+        <p>
+        Category: @Html.DropDownList("CategoryList", "All")
+        &nbsp
+        <input type="submit" value="Filter" />
+        </p>
+    }
+
+<!-- Table headers-->
+<div class="SingleElement" style="display:table-header-group" >
+    @Html.DisplayNameFor(model => model.date)
+</div>
+<div class="SingleElement">
+    @Html.DisplayNameFor(model => model.Category)
+</div>
+<div class="SingleElement">
+    @Html.DisplayNameFor(model => model.Expense)
+</div>
+<div class="SingleElement">
+    @Html.DisplayNameFor(model => model.Comment)
+</div>
+    
+<br />
+
+<!-- Data list -->
+@foreach (var item in Model)
+{
+    string iid = item.ID;
+    string name = "DetailPane" + item.ID;
+    string eName = "EditPane" + item.ID;
+    string dbutton = "D" + iid;
+    string ebutton = "E" + iid;
+    <p>
+        <div class="block" onmouseover="return ContentMouseOver('@iid')">
+            <div class="SingleElement">
+                @Html.DisplayFor(modelItem => item.date)
+            </div>
+            <div class="SingleElement">
+                @Html.DisplayFor(modelItem => item.Category)
+            </div>
+            <div class="SingleElement">
+                @Html.DisplayFor(modelItem => item.Expense)
+            </div>
+            <div class="SingleElement">
+                @Html.DisplayFor(modelItem => item.Comment)
+            </div>
+            <div class="MultiElement">
+                <input id=@dbutton type="submit" value="Details"  onclick="return DetailClick('@iid');" /> |
+                <input id=@ebutton type="submit" value="Edit"  onclick="return EditClick('@iid');" /> |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "Delete" })
+            </div>
+        </div>
+        <div style="width=100%; display:none" id="@name">
+            <h4 style="color:gray">Transaction Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.date)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(modelItem => item.date)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Expense)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Expense)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </dd>
+
+            </dl>
+        </div>
+        
+            @using (Html.BeginForm("Edit", "TransactionEdit", new { ID = item.ID, date = item.date, Category = item.Category, Expense = item.Expense, Comment = item.Comment }, FormMethod.Post, new { @class = "TransactionForm" }))
+{
+    <div style="width:100%; display:none" id="@eName">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Transaction</h4>
+            <hr />
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                @Html.HiddenFor(model => item.ID)
+
+                <div class="form-group">
+                    @Html.LabelFor(modelItem => item.date, new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(modelItem => item.date, "", "date")
+                        @Html.ValidationMessageFor(modelItem => item.date)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(modelItem => item.Category, new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(modelItem => item.Category, "", "Category")
+                        @Html.ValidationMessageFor(modelItem => item.Category)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(modelItem => item.Expense, new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(modelItem => item.Expense, "", "Expense")
+                        @Html.ValidationMessageFor(modelItem => item.Expense)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(modelItem => item.Comment, new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(modelItem => item.Comment, "", "Comment")
+                        @Html.ValidationMessageFor(modelItem => item.Comment)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div style="float:left">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+}
+        
+</p>
+    <br />
+}
+                
+
+    <script>
+
+        $(document).ready(function () {
+            $("#CreateDate").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        function EditClick(sid) {
+            if (document.getElementById("EditPane" + sid).style.display == "none") {
+                document.getElementById("DetailPane" + sid).style.display = "none"
+                document.getElementById("EditPane" + sid).style.display = "table-row"
+            }
+            else {
+                document.getElementById("EditPane" + sid).style.display = "none"
+            }
+
+            if (document.getElementById("CreatePane").style.display != "none")
+            {
+                CreateCancel();
+            }
+        }
+
+        function CreateClick() {
+            if (document.getElementById("CreatePane").style.display == "none") {
+                
+                document.getElementById("CreatePane").style.display = "table-row"
+                document.getElementById("CreateButton").style.display = "none"
+            }
+            else {
+                document.getElementById("CreatePane" ).style.display = "none"
+            }
+        }
+
+        function CancelCreate() {
+            document.getElementById("CreatePane").style.display = "none";
+            document.getElementById("CreateButton").style.display = "table-row";
+        }
+
+        function ContentMouseOver(sid)
+        {
+            document.getElementById("D" + sid).style.display == "none"
+            document.getElementById("E" + sid).style.display == "table-row"
+            document.getElementById("CreatePane").style.display = "table-row"
+            document.getElementById("CreateButton").innerHTML = "<div>" + sid + "</div>"
+        }
+        function DetailClick(sid) {
+            if (document.getElementById("DetailPane" + sid).style.display == "none") {
+                document.getElementById("DetailPane" + sid).style.display = "table-row"
+                document.getElementById("EditPane" + sid).style.display = "none"
+            }
+            else {
+                document.getElementById("DetailPane" + sid).style.display = "none"
+            }
+
+            $(document).ready(function () {
+                $('.edit')
+            });
+        }
+    </script>
+
+    @*<tr class="zebra">
+            <td colspan="4">
+                <table class="table-striped">
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Expense)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+
+                            <input id=@iid type="submit" value="Edit" onclick="return EditClick('@iid');" /> |
+                            @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "Edit" }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "Delete" })
+                        </td>
+                    </tr>
+
+
+
+                    <tr id=@name style="display:none">
+                        <td>
+                            <div>
+                                <h4 style="color:gray">Transaction Details</h4>
+                                <hr />
+                                <dl class="dl-horizontal">
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.date)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.date)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Category)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Category)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Expense)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Expense)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Comment)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.Comment)
+                                    </dd>
+
+                                </dl>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+        </tr>*@
